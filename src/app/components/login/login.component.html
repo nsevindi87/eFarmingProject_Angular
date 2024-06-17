@@ -1,29 +1,30 @@
 <div class="container">
   <div class="row mt-5">
     <div class="col-6">
-      <form [formGroup]="checkoutForm" (ngSubmit)="onSubmit()">
+      <form (ngSubmit)="onSubmit()">
         <div class="mb-3">
           <label for="email" class="form-label">Email address</label>
           <input
             type="email"
             class="form-control"
             id="email"
-            formControlName="email"
-            aria-describedby="emailHelp"
+            [(ngModel)]="userData.email"
+            name="email"
+            required
           />
-          <div id="emailHelp" class="form-text">
-            We'll never share your email with anyone else.
-          </div>
         </div>
         <div class="mb-3">
           <label for="password" class="form-label">Password</label>
           <input
             type="password"
             class="form-control"
-            formControlName="password"
+            [(ngModel)]="userData.password"
             id="password"
+            name="password"
+            required
           />
         </div>
+        <div *ngIf="errorMessage" class="error-message">{{ errorMessage }}</div>
         <button type="submit" class="btn btn-primary">Submit</button>
       </form>
     </div>

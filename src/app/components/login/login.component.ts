@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
@@ -10,21 +12,29 @@ import { FormBuilder, FormGroup, Validators} from '@angular/forms';
 
 export class LoginComponent {
 
-  checkoutForm: FormGroup;
+  userData = {
+    email: '',
+    password: ''
+  };
 
-  constructor(private formBuilder: FormBuilder) {
-    this.checkoutForm = this.formBuilder.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required]]
-    });
-  }
+  errorMessage = '';
+  constructor(private authService: AuthService, private router: Router) {}
 
-  onSubmit(): void {
-    if (this.checkoutForm.valid) {
-      console.log('Form Submitted');
-      console.log('Email:', this.checkoutForm.value.email);
-      console.log('Password:', this.checkoutForm.value.password);
-      // Burada form verilerini işleyebilirsiniz
+  onSubmit() {
+    if (!this.userData.email || !this.userData.password) {
+      this.errorMessage = 'Email and password are required';
+      return;
     }
+    
+    this.authService.login(this.userData.email, this.userData.password).subscribe({
+      next: (response: any) => {
+        console.log('Login successful', response);
+        this.router.navigate(['/profile']);
+      },
+      error: (error: any) => {
+        console.error('Login failed', error);
+        this.errorMessage = error.error.message; 
+      }
+    });
   }
 }

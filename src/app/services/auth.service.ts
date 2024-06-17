@@ -17,4 +17,8 @@ export class AuthService {
   signup(userData: any) {
     return this.http.post<any>('http://localhost:3302/users/signup', userData);
   }
+
+  login(email: string, password: string) {
+    return this.http.post<any>('http://localhost:3302/users/login', { email, password });
+  }
 }

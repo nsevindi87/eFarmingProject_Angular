@@ -1,13 +1,18 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators,FormControl} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators,FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.component.html',
-  styleUrls: ['./signup.component.css']
+  styleUrls: ['./signup.component.css'],
+  standalone:true,
+  imports: [
+      FormsModule,
+      ReactiveFormsModule,
+    ]
 })
 export class SignupComponent {
 
@@ -20,19 +25,7 @@ export class SignupComponent {
 
   errorMessage = '';
 
-  /*constructor(private http: HttpClient) { }
-
-   submitForm() {
-    this.http.post('http://localhost:3302/users/signup', this.userData).subscribe({
-      next: response => {
-        console.log('Response from server:', response);
-      },
-      error: error => {
-        console.error('Error from server:', error);
-      }
-    });
-  } */
-
+  
   constructor(private authService: AuthService) { }
 
   submitForm() {
@@ -47,14 +40,34 @@ export class SignupComponent {
           },
           error: (error: any) => {
             console.error('Signup failed', error);
-            this.errorMessage = error.error.message; // Backend'den gelen hata mesajını göster
+            this.errorMessage = error.error.message; // 
           }
         });
       },
       error: (error: any) => {
         console.error('Error checking email:', error);
-        this.errorMessage = error.error.message; // Backend'den gelen hata mesajını göster
+        this.errorMessage = error.error.message; // 
       }
     });
   }
+
+  /* myForm: FormGroup;
+
+  constructor(private formBuilder: FormBuilder) {
+    this.myForm = this.formBuilder.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required, Validators.minLength(6)]]
+    });
+  }
+
+  ngOnInit(): void {}
+
+  onSubmit(): void {
+    if (this.myForm.valid) {
+      console.log('Form Submitted', this.myForm.value);
+    } else {
+      console.log('Form is invalid');
+    }
+  } */
+
 }
